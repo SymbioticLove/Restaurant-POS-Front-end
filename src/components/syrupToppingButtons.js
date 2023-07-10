@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './syrupToppingButtons.css';
 
 const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) => {
+  const [newButtonName, setNewButtonName] = useState('');
+  const [newButtonPrice, setNewButtonPrice] = useState(0);
+  const [customButtonTotal, setCustomButtonTotal] = useState(0);
+
   const toggleButton = (index) => {
     const updatedToppings = [...syrupToppings];
-    updatedToppings[index].isActive = !updatedToppings[index].isActive;
+    const topping = updatedToppings[index];
+    topping.isActive = !topping.isActive;
     setSyrupToppings(updatedToppings);
-    onAddTopping(calculateToppingsPrice(updatedToppings));
+    const priceToAdd = topping.isActive ? topping.price : -topping.price;
+    onAddTopping(priceToAdd);
+    if (topping.custom) {
+      setCustomButtonTotal((prevTotal) => prevTotal + priceToAdd);
+    }
   };
 
-  const calculateToppingsPrice = (toppings) => {
-    return toppings.reduce((total, topping) => {
-      return total + (topping.isActive ? topping.price : 0);
-    }, 0);
+  const handleOpenButton = () => {
+    if (newButtonName.trim() === '' || newButtonPrice <= 0) {
+      // Display an error message or handle invalid input
+      return;
+    }
+
+    const newButton = {
+      name: newButtonName.trim(),
+      price: newButtonPrice,
+      isActive: false,
+      custom: true,
+    };
+
+    setSyrupToppings((prevToppings) => [...prevToppings, newButton]);
+    setNewButtonName('');
+    setNewButtonPrice(0);
   };
 
   return (
@@ -25,8 +46,27 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
         >
           {syrupTopping.name} (${syrupTopping.price.toFixed(2)})
           {syrupTopping.isActive && <span className="checkmark">&#10003;</span>}
+          {syrupTopping.custom && <span className="custom-indicator">(Custom)</span>}
         </button>
       ))}
+      <div className="new-button">
+        <input
+          type="text"
+          placeholder="Name"
+          value={newButtonName}
+          onChange={(e) => setNewButtonName(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          value={newButtonPrice}
+          onChange={(e) => setNewButtonPrice(parseFloat(e.target.value))}
+        />
+        <button onClick={handleOpenButton}>Open</button>
+      </div>
+      <div className="custom-button-total">
+        Total from Custom Buttons: ${customButtonTotal.toFixed(2)}
+      </div>
     </div>
   );
 };

@@ -4,11 +4,11 @@ import './sizeButtons.css'
 const SizeButtons = ({ selectedSize, onSelectSize }) => {
   const getSizePrice = (size) => {
     switch (size) {
-      case 'small':
+      case 'Small':
         return 2.49;
-      case 'medium':
+      case 'Medium':
         return 3.29;
-      case 'large':
+      case 'Large':
         return 4.19;
       default:
         return 0;
@@ -27,23 +27,26 @@ const SizeButtons = ({ selectedSize, onSelectSize }) => {
   return (
     <div className="size-buttons">
       <button
-        className={`size-button ${selectedSize === 'small' ? 'selected' : ''}`}
-        onClick={() => handleSizeSelect('small')}
+        className={`size-button ${selectedSize === 'Small' ? 'selected' : ''}`}
+        onClick={() => handleSizeSelect('Small')}
       >
-        Small (${getSizePrice('small').toFixed(2)})
+        Small (${getSizePrice('Small').toFixed(2)})
       </button>
       <button
-        className={`size-button ${selectedSize === 'medium' ? 'selected' : ''}`}
-        onClick={() => handleSizeSelect('medium')}
+        className={`size-button ${selectedSize === 'Medium' ? 'selected' : ''}`}
+        onClick={() => handleSizeSelect('Medium')}
       >
-        Medium (${getSizePrice('medium').toFixed(2)})
+        Medium (${getSizePrice('Medium').toFixed(2)})
       </button>
       <button
-        className={`size-button ${selectedSize === 'large' ? 'selected' : ''}`}
-        onClick={() => handleSizeSelect('large')}
+        className={`size-button ${selectedSize === 'Large' ? 'selected' : ''}`}
+        onClick={() => handleSizeSelect('Large')}
       >
-        Large (${getSizePrice('large').toFixed(2)})
+        Large (${getSizePrice('Large').toFixed(2)})
       </button>
+      {selectedSize && (
+        <div className="selected-size">Size: {selectedSize}</div>
+      )}
     </div>
   );
 };
