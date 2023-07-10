@@ -3,6 +3,8 @@ import SizeButtons from './components/sizeButtons';
 import FlavorButtons from './components/flavorButtons';
 import SyrupToppingButtons from './components/syrupToppingButtons';
 import DiscountButtons from './components/discountButtons';
+import AddNewUser from './components/AddNewUser';
+import axios from 'axios';
 import './App.css';
 
 const App = () => {
@@ -217,20 +219,42 @@ const App = () => {
     }
   };
 
-  const handleEnterButtonClick = () => {
-    // Check if the login number matches any entries in the dataset
-    const dataset = [
-      { Login: "1111", "Access-level": "user" },
-      { Login: "9999", "Access-level": "admin" },
-    ];
-
-    const matchedEntry = dataset.find((entry) => entry.Login === loginNumber);
-
-    if (matchedEntry) {
-      setIsLoggedIn(true); // Set the login status to true if a match is found
-      setAccessLevel(matchedEntry["Access-level"]); // Set the access level based on the matched entry
-    } else {
-      setLoginNumber(""); // Clear the login number if no match is found
+  const handleEnterButtonClick = async () => {
+    if (loginNumber === '1111') {
+      setIsLoggedIn(true);
+      setAccessLevel('user');
+      return;
+    }
+  
+    if (loginNumber === '9999') {
+      setIsLoggedIn(true);
+      setAccessLevel('admin');
+      return;
+    }
+  
+    try {
+      // Make a GET request to fetch the users from the Flask server
+      const response = await axios.get('http://localhost:5000/users');
+      const users = response.data;
+  
+      // Check if the login number matches any entries in the dataset
+      const matchedEntry = users.find((user) => user.UserId === loginNumber);
+  
+      if (matchedEntry) {
+        setIsLoggedIn(true); // Set the login status to true if a match is found
+  
+        // Set the access level based on the matched entry's AccessLevel property
+        if (matchedEntry.AccessLevel === 'Admin') {
+          setAccessLevel('admin');
+        } else if (matchedEntry.AccessLevel === 'User') {
+          setAccessLevel('user');
+        }
+      } else {
+        setLoginNumber(''); // Clear the login number if no match is found
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      // Handle the error scenario, e.g., show an error message to the user
     }
   };
 
@@ -275,6 +299,7 @@ const App = () => {
             discounts={discounts}
           />
           <div className="running-total">
+            <h3>Subtotal</h3>
             Running Subtotal: ${calculateRunningTotal()}
           </div>
           <button className="pay-now-button" onClick={handlePayNow}>
@@ -329,6 +354,7 @@ const App = () => {
               ))}
           </div>
           <button onClick={handleLogoutButtonClick}>Logout</button>
+          <AddNewUser />
         </>
       )}
       {isLoggedIn && accessLevel === "user" && (
@@ -344,6 +370,7 @@ const App = () => {
           onAddTopping={handleAddTopping}
         />
         <div className="running-total">
+          <h3>Subtotal</h3>
           Running Subtotal: ${calculateRunningTotal()}
         </div>
         <button className="pay-now-button" onClick={handlePayNow}>
