@@ -1,1 +1,1 @@
-
+We are working on a complete POS system for small businesses! This system will be lightweight and capable of revolutionizing your small restaurant's workflow and order management. I spent 14 years in the restaurant industry before becoming a developer with many years in management, including 4 as a general manager, so I am uniquely qualified to create a system for restaurants. There were many times when I was working that I wished that my system wasn't such a pain in the neck. I now have the opportunity to make that possible.
