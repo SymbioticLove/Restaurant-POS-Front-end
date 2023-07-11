@@ -1,0 +1,18 @@
+[
+    {
+        "FName": "Store",
+        "LName": "Admin",
+        "UserId": "9999",
+        "AccessLevel": "Admin",
+        "MinutesWorked": 0,
+        "IsClockedIn": true
+    },
+    {
+        "FName": "Store",
+        "LName": "Employee",
+        "UserId": "1111",
+        "AccessLevel": "User",
+        "MinutesWorked": 0,
+        "IsClockedIn": true
+    }
+]

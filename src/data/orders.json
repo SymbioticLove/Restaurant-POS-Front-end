@@ -1,0 +1,20 @@
+[
+    {
+        "discount": false,
+        "subtotal": "4.17",
+        "tax": "0.23",
+        "total": "4.400",
+        "orderNumber": "762964807550",
+        "timestamp": "2023-07-11 12:27:51"
+    },
+    {
+        "discount": true,
+        "subtotal": "5.56",
+        "discount amount": "2.78",
+        "tax": "0.31",
+        "discounted total": "3.090",
+        "discount type": "Quality 50%",
+        "order number": "131126115970",
+        "timestamp": "2023-07-11 13:05:11"
+    }
+]
