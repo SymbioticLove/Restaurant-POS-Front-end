@@ -8,11 +8,23 @@ const AddNewUser = () => {
   const [accessLevel, setAccessLevel] = useState('');
 
   const handleAddUser = async () => {
+    if (firstName === '' || lastName === '' || userID === '' || accessLevel === '') {
+      alert('Please fill out all of the fields');
+      return;
+    }
+
+    if (!/^\d{4}$/.test(userID)) {
+      alert('Please enter a 4-digit User ID');
+      return;
+    }
+
     const newUser = {
       FName: firstName,
       LName: lastName,
       UserId: userID,
       AccessLevel: accessLevel,
+      MinutesWorked: 0,
+      IsClockedIn: false,
     };
 
     try {
@@ -24,7 +36,7 @@ const AddNewUser = () => {
       alert('New user added successfully!');
     } catch (error) {
       console.error('Error adding new user:', error);
-      alert('Failed to add new user. Please try again.');
+      alert('Failed to add a new user. Please try again.');
     }
   };
 

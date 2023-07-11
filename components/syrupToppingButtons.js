@@ -38,6 +38,7 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
 
   return (
     <div className="syrup-topping-buttons">
+      <h3>Add-Ins/Toppings</h3>
       {syrupToppings.map((syrupTopping, index) => (
         <button
           key={index}
