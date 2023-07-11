@@ -54,15 +54,14 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginNumber, setLoginNumber] = useState("");
   const [accessLevel, setAccessLevel] = useState("");
+  const [loginNumberTracking, setLoginNumberTracking] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
+
+  const logToConsole = (message) => {
+    setConsoleLogs((prevLogs) => [...prevLogs, message]);
+  };
 
   useEffect(() => {
-    const logs = [];
-
-    const logToConsole = (message) => {
-      logs.push(message);
-      setConsoleLogs([...logs]);
-    };
-
     console.log = (message) => logToConsole(message);
 
     return () => {
@@ -86,30 +85,29 @@ const App = () => {
     return total.toFixed(2);
   };
 
-  const handlePayNow = () => {
+  const handlePayNow = async () => {
     if (!selectedSize) {
-      console.log("Select a Size!"); // Make User Select Size
+      alert("Select a Size!"); // Make User Select Size
       return;
     }
-
+  
     let name = prompt("Enter customer name:"); // Prompt for customer name
-
-      while (!name) {
-        name = prompt("Enter customer name:"); // Re-prompt for customer name
-      }
-
-      setCustomerName(name); // Set the customer name
-
+  
+    while (!name) {
+      name = prompt("Enter customer name:"); // Re-prompt for customer name
+    }
+  
+    setCustomerName(name); // Set the customer name
   
     let sizePrice = getSizePrice(selectedSize);
     let flavorPrice = selectedFlavors.length * 0.89;
     let addInsPrice = toppingsPrice;
     let total = sizePrice + flavorPrice + addInsPrice;
   
-    // Apply discount if selected
     let originalTotal = total;
     let discountAmount = 0;
     let discountType = "None"; // Default value for discount type
+  
     if (selectedDiscount) {
       const discount = discounts.find((discount) => discount.name === selectedDiscount);
       if (discount) {
@@ -123,59 +121,34 @@ const App = () => {
       }
     }
   
-    // Reset selections
-    setSelectedSize(null);
-    setSelectedFlavors([]);
-    setToppingsPrice(0);
-    setSelectedDiscount(null); // Deselect the currently selected discount
-    
-    console.log('');
-    console.log('');
-    console.log(`Size: ${selectedSize ? selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1) : null}`);
+    const logs = [];
+    logs.push('');
+    logs.push('');
+    logs.push(`Size: ${selectedSize ? selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1) : null}`);
   
-    let flavorsText = selectedFlavors.length > 0 ? selectedFlavors.join(", ") : "None";
-    console.log(`Flavors: ${flavorsText}`);
+    const flavorsText = selectedFlavors.length > 0 ? selectedFlavors.join(", ") : "None";
+    logs.push(`Flavors: ${flavorsText}`);
   
-    // Accumulate selected add-ins and their sold counts
     const nonCustomAddIns = syrupToppings.filter((topping) => topping.isActive && !topping.custom);
     const selectedAddIns = nonCustomAddIns.map((topping) => topping.name);
-    const nonCustomAddInCounts = nonCustomAddIns.map((topping) => topping.soldCount + 1);
   
     if (selectedAddIns.length > 0) {
-      console.log(`Add-ins: ${selectedAddIns.join(", ")}`);
+      logs.push(`Add-ins: ${selectedAddIns.join(", ")}`);
     } else {
-      console.log("Add-ins: None");
+      logs.push("Add-ins: None");
     }
   
-    // Calculate tax
     const tax = (originalTotal * 0.056).toFixed(2);
-  
-    // Calculate total with tax
     const totalWithTax = (parseFloat(originalTotal) + parseFloat(tax)).toFixed(2);
   
-    console.log('');
-    console.log(`Subtotal: $${originalTotal.toFixed(2)}`);
-    console.log(`Tax: $${tax}`);
+    logs.push('');
+    logs.push(`Subtotal: $${originalTotal.toFixed(2)}`);
+    logs.push(`Tax: $${tax}`);
+    logs.push(`Total: $${totalWithTax}`);
+    logs.push('');
   
-    if (selectedDiscount) {
-      const discountedTotalWithTax = (parseFloat(total) + parseFloat(tax)).toFixed(2);
+    setConsoleLogs(logs); // Update the console logs with the new order information
   
-      console.log(`Discounted Total: $${discountedTotalWithTax}`);
-      console.log('');
-      console.log(`Total Discount: $${discountAmount.toFixed(2)}`);
-      console.log(`Discount Type: ${discountType}`);
-      console.log('');
-    } else {
-      console.log(`Total: $${totalWithTax}`);
-      console.log('');
-    }
-  
-    nonCustomAddIns.forEach((addIn, index) => {
-      const addInCount = nonCustomAddInCounts[index];
-      console.log(`Total ${addIn.name} sold: ${addInCount}`);
-    });
-  
-    // Update syrup toppings
     const updatedToppings = syrupToppings.map((topping) => {
       const updatedTopping = { ...topping };
       if (updatedTopping.isActive) {
@@ -186,7 +159,68 @@ const App = () => {
     });
   
     setSyrupToppings(updatedToppings);
-  };                 
+    setSelectedSize(null); // Reset selectedSize to null
+    setSelectedFlavors([]); // Reset selectedFlavors to an empty array
+    setToppingsPrice(0); // Reset toppingsPrice to 0
+    setSelectedDiscount(null); // Reset selectedDiscount to null
+  
+    const soldLogs = syrupToppings
+      .filter((topping) => topping.isActive && !topping.custom)
+      .map((topping) => {
+        return {
+          name: topping.name,
+          price: topping.price,
+          isActive: topping.isActive,
+          soldCount: topping.soldCount + 1
+        };
+      });
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(soldLogs)
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5000/inventory', requestOptions);
+      if (response.ok) {
+        // Sold logs successfully updated in the inventory
+        console.log('Sold logs updated in the inventory.');
+      } else {
+        console.error('Failed to update sold logs in the inventory.');
+      }
+    } catch (error) {
+      console.error('Error occurred while updating sold logs in the inventory:', error);
+    }
+  
+    // Send the relevant information to the simulated payment API
+    const paymentData = {
+      subtotal: originalTotal.toFixed(2),
+      tax: tax,
+      total: totalWithTax,
+      discount: selectedDiscount ? true : false,
+      discountAmount: discountAmount.toFixed(2),
+      discountType: discountType
+    };
+  
+    try {
+      const paymentResponse = await fetch('http://localhost:5000/pay', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(paymentData)
+      });
+  
+      if (paymentResponse.ok) {
+        const paymentResult = await paymentResponse.text();
+        console.log('Payment API response:', paymentResult);
+        alert("Please Present Payment");
+      } else {
+        console.error('Failed to send payment data to the API.');
+      }
+    } catch (error) {
+      console.error('Error occurred while sending payment data to the API:', error);
+    }
+  };                            
   
   const getSizePrice = (size) => {
     switch (size) {
@@ -218,51 +252,94 @@ const App = () => {
       setLoginNumber(loginNumber + number); // Append the clicked number to the current login number
     }
   };
-
-  const handleEnterButtonClick = async () => {
-    if (loginNumber === '1111') {
-      setIsLoggedIn(true);
-      setAccessLevel('user');
-      return;
+  
+  const handleEnterButtonClick = () => {
+    const usersData = require('./data/users.json');
+    const matchedEntry = usersData.find((user) => user.UserId === loginNumber);
+  
+    if (matchedEntry) {
+      if (!matchedEntry.IsClockedIn) {
+        alert('Please Clock In'); // Display an alert if the user is not clocked in
+        return;
+      }
+  
+      setIsLoggedIn(true); // Set the login status to true if a match is found
+      setLoginNumberTracking(loginNumber); // Capture the login number if it is a successful login
+      setEmployeeName(`${matchedEntry.FName} ${matchedEntry.LName}`); // Capture the employee name
+      setAccessLevel(matchedEntry.AccessLevel); // Set the access level based on the matched entry's AccessLevel property
+    } else {
+      alert('No match found');
+      setLoginNumber(''); // Clear the login number if no match is found
     }
+  };    
   
-    if (loginNumber === '9999') {
-      setIsLoggedIn(true);
-      setAccessLevel('admin');
-      return;
-    }
+  const handleClockInOut = async () => {
+    const usersData = require('./data/users.json');
+    const matchedIndex = usersData.findIndex((user) => user.UserId === loginNumber);
   
-    try {
-      // Make a GET request to fetch the users from the Flask server
-      const response = await axios.get('http://localhost:5000/users');
-      const users = response.data;
-  
-      // Check if the login number matches any entries in the dataset
-      const matchedEntry = users.find((user) => user.UserId === loginNumber);
-  
-      if (matchedEntry) {
-        setIsLoggedIn(true); // Set the login status to true if a match is found
-  
-        // Set the access level based on the matched entry's AccessLevel property
-        if (matchedEntry.AccessLevel === 'Admin') {
-          setAccessLevel('admin');
-        } else if (matchedEntry.AccessLevel === 'User') {
-          setAccessLevel('user');
+    if (matchedIndex !== -1) {
+      const matchedEntry = usersData[matchedIndex];
+      if (!matchedEntry.IsClockedIn) {
+        const confirmClockIn = window.confirm('Would you like to clock in?');
+        if (confirmClockIn) {
+          // Update the IsClockedIn flag to true
+          matchedEntry.IsClockedIn = true;
+          try {
+            await axios.post('http://localhost:5000/users', matchedEntry);
+            alert('You have clocked in successfully.');
+          } catch (error) {
+            console.error('Error updating user data:', error);
+            alert('Failed to update user data. Check the "users.json" file and error message!');
+          }
+        } else {
+          return;
         }
       } else {
-        setLoginNumber(''); // Clear the login number if no match is found
+        const confirmClockOut = window.confirm('Would you like to clock out?');
+        if (confirmClockOut) {
+          // Update the IsClockedIn flag to false
+          matchedEntry.IsClockedIn = false;
+          try {
+            await axios.post('http://localhost:5000/users', matchedEntry);
+            alert('You have clocked out successfully.');
+            setLoginNumber('');
+          } catch (error) {
+            console.error('Error updating user data:', error);
+            alert('Failed to update user data. Please try again.');
+          }
+        } else {
+          return;
+        }
       }
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      // Handle the error scenario, e.g., show an error message to the user
+      // Update the usersData array with the updated entry
+      usersData[matchedIndex] = matchedEntry;
+    } else {
+      alert('User Not Found');
     }
-  };
+  };    
 
   const handleLogoutButtonClick = () => {
     setIsLoggedIn(false); // Set isLoggedIn to false to log out the user
     setLoginNumber(""); // Clear the login number
+    setLoginNumberTracking(""); // Clear the login number tracking
+    setEmployeeName(""); // Clear the stored employee name
     setConsoleLogs([]); // Clear the console logs
     setCustomerName(""); // Clear the customer name
+    setSelectedSize(null); // Reset selectedSize to null
+    setSelectedFlavors([]); // Reset selectedFlavors to an empty array
+    setToppingsPrice(0); // Reset toppingsPrice to 0
+    setSelectedDiscount(null); // Reset selectedDiscount to null
+    setSyrupToppings((prevToppings) => {
+      // Reset all topping buttons to isActive: false and soldCount: 0
+      return prevToppings.map((topping) => ({
+        ...topping,
+        isActive: false,
+      }));
+    });
+  };
+  
+  const handleClearButtonClick = () => {
+    setLoginNumber('');
   };
 
   return (
@@ -273,16 +350,19 @@ const App = () => {
           <div className="login-window">{loginNumber}</div>
           <div className="number-pad">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((number) => (
-              <button key={number} onClick={() => handleNumberPadClick(number)}>
-                {number}
-              </button>
-            ))}
-            <button onClick={handleEnterButtonClick}>Enter</button>
-          </div>
+            <button key={number} onClick={() => handleNumberPadClick(number)}>
+              {number}
+            </button>
+          ))}
+          <button onClick={handleEnterButtonClick}>Enter</button>
+          <button onClick={handleClockInOut}>Clock In/Out</button>
+          <button onClick={handleClearButtonClick}>Clear</button>
         </div>
+      </div>
       )}
-      {isLoggedIn && accessLevel === "admin" && (
+      {isLoggedIn && accessLevel === "Admin" && (
         <>
+        <h1>{employeeName} - mgr.</h1>
           <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
           <FlavorButtons
             selectedFlavors={selectedFlavors}
@@ -333,32 +413,13 @@ const App = () => {
                 <p key={index}>{log}</p>
               ))}
           </div>
-          <div className="discount-logs">
-            <h3>Discount Logs</h3>
-            {consoleLogs
-              .filter(
-                (log) =>
-                  log.startsWith("Total Discount:") ||
-                  log.startsWith("Discount Type:")
-              )
-              .map((log, index) => (
-                <p key={index}>{log}</p>
-              ))}
-          </div>
-          <div className="sold-logs">
-            <h3>Total Sold Logs</h3>
-            {consoleLogs
-              .filter((log) => log.includes("Total") && log.includes("sold:"))
-              .map((log, index) => (
-                <p key={index}>{log}</p>
-              ))}
-          </div>
           <button onClick={handleLogoutButtonClick}>Logout</button>
           <AddNewUser />
         </>
       )}
-      {isLoggedIn && accessLevel === "user" && (
+      {isLoggedIn && accessLevel === "User" && (
       <div>
+        <h1>{employeeName}</h1>
         <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
         <FlavorButtons
           selectedFlavors={selectedFlavors}
