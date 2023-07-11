@@ -26,6 +26,7 @@ const SizeButtons = ({ selectedSize, onSelectSize }) => {
 
   return (
     <div className="size-buttons">
+      <h3>Sizes</h3>
       <button
         className={`size-button ${selectedSize === 'Small' ? 'selected' : ''}`}
         onClick={() => handleSizeSelect('Small')}

@@ -20,6 +20,7 @@ const FlavorButtons = ({ selectedFlavors, onSelectFlavor }) => {
 
   return (
     <div className="flavor-buttons">
+      <h3>Flavors</h3>
       {flavorData.map((flavor) => (
         <button
           key={flavor.name}

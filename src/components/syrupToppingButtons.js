@@ -38,6 +38,7 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
 
   return (
     <div className="syrup-topping-buttons">
+      <h3>Add-Ins/Toppings</h3>
       {syrupToppings.map((syrupTopping, index) => (
         <button
           key={index}
@@ -50,9 +51,10 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
         </button>
       ))}
       <div className="new-button">
+        <h3>Create New Button</h3>
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Item Name"
           value={newButtonName}
           onChange={(e) => setNewButtonName(e.target.value)}
         />
@@ -62,7 +64,7 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
           value={newButtonPrice}
           onChange={(e) => setNewButtonPrice(parseFloat(e.target.value))}
         />
-        <button onClick={handleOpenButton}>Open</button>
+        <button onClick={handleOpenButton}>Create Button</button>
       </div>
       <div className="custom-button-total">
         Total from Custom Buttons: ${customButtonTotal.toFixed(2)}
