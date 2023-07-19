@@ -14,10 +14,13 @@ The POS system is created by an individual with 14 years of experience in the re
 
 ## Installation
 1. Clone the repository or download the source code files.
-2. Install the required dependencies for the frontend by running the command: `npm install`.
-3. Install the required dependencies for the backend by running the command: `pip install Flask Flask-CORS APScheduler`.
-4. Start the frontend application by running the command: `npm start`.
-5. Start the backend server by running the command: `python server.py`.
+2. Navigate to the downloaded directory
+3. Install the required dependencies for the frontend by running the command: `npm install`.
+4. (optional but recommended) Create a new virtual enviroment by running the command `python -m venv env` where 'env' is the name of your environment
+5. (if you did step 4) Activate the virtual environment with the command `\env\Scripts\activate'
+6. Install the required dependencies for the backend by running the command: `pip install Flask Flask-CORS APScheduler`.
+7. Start the frontend application by running the command: `npm start`.
+8. Start the backend server by running the command: `python server.py`.
 
 ## Frontend Dependencies
 - React
