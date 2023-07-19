@@ -1,18 +1,131 @@
 [
     {
+        "IsClockedIn": true,
+        "MostRecentClockIn": "2023-07-12 17:31:24",
+        "MostRecentClockOut": "2023-07-12 17:23:59",
         "FName": "Store",
         "LName": "Admin",
         "UserId": "9999",
         "AccessLevel": "Admin",
-        "MinutesWorked": 0,
-        "IsClockedIn": false
+        "MinutesWorked": {
+            "2023-07-12": 383,
+            "2023-07-13": 1439,
+            "2023-07-14": 1438,
+            "2023-07-15": 1439,
+            "2023-07-16": 1439,
+            "2023-07-17": 1437,
+            "2023-07-18": 1438,
+            "2023-07-19": 1004
+        },
+        "LastUpdate": "16:46:15",
+        "PayRate": 0
     },
     {
+        "IsClockedIn": true,
+        "MostRecentClockIn": "2023-07-12 18:04:43",
+        "MostRecentClockOut": "2023-07-13 16:17:43",
         "FName": "Store",
         "LName": "Employee",
         "UserId": "1111",
         "AccessLevel": "User",
-        "MinutesWorked": 0,
-        "IsClockedIn": false
+        "MinutesWorked": {
+            "2023-07-12": 350,
+            "2023-07-13": 1434,
+            "2023-07-14": 1438,
+            "2023-07-15": 1439,
+            "2023-07-16": 1439,
+            "2023-07-17": 1437,
+            "2023-07-18": 1438,
+            "2023-07-19": 1004
+        },
+        "LastUpdate": "16:46:15",
+        "PayRate": 0
+    },
+    {
+        "IsClockedIn": true,
+        "MostRecentClockIn": "2023-07-19 16:41:08",
+        "MostRecentClockOut": "2023-07-13 16:17:11",
+        "FName": "Matthew",
+        "LName": "Ford",
+        "UserId": "7757",
+        "AccessLevel": "Admin",
+        "MinutesWorked": {
+            "2023-07-19": 6
+        },
+        "LastUpdate": "16:46:15",
+        "PayRate": 21.55
+    },
+    {
+        "IsClockedIn": false,
+        "MostRecentClockIn": null,
+        "MostRecentClockOut": null,
+        "FName": "Sally",
+        "LName": "Strothers",
+        "UserId": "0783",
+        "AccessLevel": "User",
+        "MinutesWorked": {},
+        "PayRate": 12.4,
+        "LastUpdate": "03:43:18"
+    },
+    {
+        "IsClockedIn": false,
+        "MostRecentClockIn": null,
+        "MostRecentClockOut": null,
+        "FName": "Bruce",
+        "LName": "Campbell",
+        "UserId": "7859",
+        "AccessLevel": "User",
+        "MinutesWorked": {},
+        "PayRate": 14.25,
+        "LastUpdate": "03:43:18"
+    },
+    {
+        "IsClockedIn": false,
+        "MostRecentClockIn": null,
+        "MostRecentClockOut": null,
+        "FName": "Clark",
+        "LName": "Kent",
+        "UserId": "4125",
+        "AccessLevel": "Admin",
+        "MinutesWorked": {},
+        "PayRate": 20,
+        "LastUpdate": "11:19:43"
+    },
+    {
+        "IsClockedIn": false,
+        "MostRecentClockIn": null,
+        "MostRecentClockOut": null,
+        "FName": "Lois",
+        "LName": "Lane",
+        "UserId": "0789",
+        "AccessLevel": "User",
+        "MinutesWorked": {},
+        "PayRate": 16.75,
+        "LastUpdate": "11:19:43"
+    },
+    {
+        "IsClockedIn": true,
+        "MostRecentClockIn": "2023-07-18 21:29:49",
+        "MostRecentClockOut": null,
+        "FName": "joe",
+        "LName": "hoe",
+        "UserId": "6666",
+        "AccessLevel": "Admin",
+        "MinutesWorked": {
+            "2023-07-19": 778
+        },
+        "PayRate": 666,
+        "LastUpdate": "16:46:15"
+    },
+    {
+        "IsClockedIn": false,
+        "MostRecentClockIn": null,
+        "MostRecentClockOut": null,
+        "FName": "sadf",
+        "LName": "fdsa",
+        "UserId": "1234",
+        "AccessLevel": "User",
+        "MinutesWorked": {},
+        "PayRate": 12
     }
 ]

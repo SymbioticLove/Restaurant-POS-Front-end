@@ -1,14 +1,43 @@
-import React, { useState, useEffect } from 'react';
+// Importing necessary libraries and hooks
+import React, {useState} from 'react';
 import SizeButtons from './components/sizeButtons';
 import FlavorButtons from './components/flavorButtons';
 import SyrupToppingButtons from './components/syrupToppingButtons';
 import DiscountButtons from './components/discountButtons';
 import AddNewUser from './components/AddNewUser';
+import LoginContainer from './components/loginContainer';
 import axios from 'axios';
 import './App.css';
 
+// This program is a highly modular and customizable demo MVP of a new, better POS system. It is designed to handle
+// every need of a small restaurant or retailer, from inventory to employee data, payroll and ordering, reporting and more.
+// This POS system is created single-handedly by an individual with 14 years of experience in the restaurant industry,
+// with 10 of those in management. This system is designed to be highly secure, running entirely on a local server.
+// This server is built as an API with Flask ('server.py'), and this API is the only way in which this data can ever be
+// written or modified. Even with malicious intent and from a POS terminal on the local network, it would be challenging
+// to modify data in any way other than in the normal course of business. The only access points to the system are through
+// the credit card terminal and through any internet connection on the machine that is running the Flask server.
+// Data is stored in .json files (currently 'orders', 'users', and 'inventory' in the 'data' directory) and accessed through
+// a Python reporting script ('reports.py') that currently generates sales, sales/emp., labor, discounts/emp.,
+// clocked-in reports, and tax reports. Taxes are calculated based on a faux payment API built into the demo server
+// at a rate of 5.6%. Scripts to zip, label, store, and properly re-initialize empty .json files weekly, and access and
+// categorize these files in weekly/monthly/anual directories are in progress. Through these, a 2tb hard-drive could 
+// theoretically store years worth of data for a small business in a highly secure, local manner. Also in progress
+// is a complete inventory program that also interacts with the API to manage inventory in a more comprehensive manner,
+// alerting businesses when stock falls low or when things were not received, etc.
+
 const App = () => {
+  // State variables
   const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedDiscount, setSelectedDiscount] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginNumber, setLoginNumber] = useState("");
+  const [accessLevel, setAccessLevel] = useState("");
+  const [loginNumberTracking, setLoginNumberTracking] = useState("");
+  const [employeeName, setEmployeeName] = useState("");
+  const [orderItems, setOrderItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [runningTotals, setRunningTotals] = useState([]);
   const [selectedFlavors, setSelectedFlavors] = useState([]);
   const [toppingsPrice, setToppingsPrice] = useState(0);
   const [syrupToppings, setSyrupToppings] = useState([
@@ -48,32 +77,26 @@ const App = () => {
     { name: 'Manager', discount: 1.00 },
   ];
 
-  const [selectedDiscount, setSelectedDiscount] = useState(null);
-  const [consoleLogs, setConsoleLogs] = useState([]);
-  const [customerName, setCustomerName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginNumber, setLoginNumber] = useState("");
-  const [accessLevel, setAccessLevel] = useState("");
-  const [loginNumberTracking, setLoginNumberTracking] = useState("");
-  const [employeeName, setEmployeeName] = useState("");
+  // Function to calculate the total price of an item 
+  const calculateItemTotal = (item) => {
+    let sizePrice = getSizePrice(item.size);
+    let flavorPrice = item.flavors.length * 0.89;
 
-  const logToConsole = (message) => {
-    setConsoleLogs((prevLogs) => [...prevLogs, message]);
+    return sizePrice + flavorPrice + item.toppingsPrice;
   };
 
-  useEffect(() => {
-    console.log = (message) => logToConsole(message);
-
-    return () => {
-      console.log = console.log;
-    };
-  }, []);
-
+  // Function to calculate the running total of the order
   const calculateRunningTotal = () => {
-    let sizePrice = selectedSize ? getSizePrice(selectedSize) : 0;
-    let flavorPrice = selectedFlavors.length * 0.89;
-    let total = sizePrice + flavorPrice + toppingsPrice;
-
+    let total = 0;
+  
+    if (runningTotals.length === 0) {
+      return 0; // Return 0 when the array is empty
+    }
+  
+    for (const itemTotal of runningTotals) {
+      total += itemTotal;
+    }
+  
     if (selectedDiscount) {
       const discount = discounts.find((discount) => discount.name === selectedDiscount);
       if (discount) {
@@ -81,13 +104,93 @@ const App = () => {
         total *= discountMultiplier;
       }
     }
+  
+    // Check if total is NaN before applying toFixed
+    return isNaN(total) ? 0 : total.toFixed(2);
+  };  
+  
+  // Function to handle adding an item to the order
+  const handleAddToOrder = () => {
+    if (!selectedSize) {
+      alert("Select a Size!");
+      return;
+    }
+  
+    const item = {
+      size: selectedSize,
+      flavors: selectedFlavors,
+      toppingsPrice: toppingsPrice,
+    };
+  
+    setOrderItems((prevItems) => [...prevItems, item]);
+    setSubtotal((prevSubtotal) => prevSubtotal + calculateItemTotal(item));
+    setRunningTotals((prevTotals) => [...prevTotals, calculateItemTotal(item)]);
+  
+    setSelectedSize(null);
+    setSelectedFlavors([]);
+    setToppingsPrice(0);
+    setSyrupToppings((prevToppings) =>
+      prevToppings.map((topping) => ({
+        ...topping,
+        isActive: false,
+      }))
+    );
+  };  
 
+  // Function to get the price of a size
+  const getSizePrice = (size) => {
+    switch (size) {
+      case 'Small':
+        return 2.49;
+      case 'Medium':
+        return 3.29;
+      case 'Large':
+        return 4.19;
+      default:
+        return 0;
+    }
+  };
+
+  // Function to handle adding a topping
+  const handleAddTopping = (price) => {
+    setToppingsPrice((prevPrice) => prevPrice + price);
+  };
+
+  // Function to calculate the total price of the current item
+  const calculateCurrentItem = () => {
+    let sizePrice = selectedSize ? getSizePrice(selectedSize) : 0;
+    let flavorPrice = selectedFlavors.length * 0.89;
+    let total = sizePrice + flavorPrice + toppingsPrice;
+  
+    if (selectedDiscount) {
+      const discount = discounts.find((discount) => discount.name === selectedDiscount);
+      if (discount) {
+        const discountMultiplier = 1 - discount.discount;
+        total *= discountMultiplier;
+      }
+    }
+  
     return total.toFixed(2);
   };
 
+  // Function to handle removing an item from the order
+  const handleRemoveOrder = (index) => {
+    const removedItem = orderItems[index];
+    const removedItemTotal = calculateItemTotal(removedItem);
+
+    setOrderItems((prevItems) => prevItems.filter((_, i) => i !== index));
+    setRunningTotals((prevTotals) => prevTotals.filter((_, i) => i !== index));
+
+    setSubtotal((prevSubtotal) => {
+      const newSubtotal = prevSubtotal - removedItemTotal;
+      return newSubtotal < 0 ? 0 : newSubtotal;
+    });
+  };
+
+  // Function to handle the payment process
   const handlePayNow = async () => {
-    if (!selectedSize) {
-      alert("Select a Size!"); // Make User Select Size
+    if (orderItems.length === 0) {
+      alert("No items in the order!"); // Make user select more than 0 items
       return;
     }
   
@@ -97,14 +200,11 @@ const App = () => {
       name = prompt("Enter customer name:"); // Re-prompt for customer name
     }
   
-    setCustomerName(name); // Set the customer name
+    
+    // Reset the subtotal
+    setSubtotal(0);
   
-    let sizePrice = getSizePrice(selectedSize);
-    let flavorPrice = selectedFlavors.length * 0.89;
-    let addInsPrice = toppingsPrice;
-    let total = sizePrice + flavorPrice + addInsPrice;
-  
-    let originalTotal = total;
+    let originalTotal = subtotal;
     let discountAmount = 0;
     let discountType = "None"; // Default value for discount type
   
@@ -112,42 +212,14 @@ const App = () => {
       const discount = discounts.find((discount) => discount.name === selectedDiscount);
       if (discount) {
         const discountMultiplier = 1 - discount.discount;
-        const discountedSizePrice = sizePrice * discountMultiplier;
-        const discountedFlavorPrice = flavorPrice * discountMultiplier;
-        const discountedAddInsPrice = addInsPrice * discountMultiplier;
-        discountAmount = originalTotal - (discountedSizePrice + discountedFlavorPrice + discountedAddInsPrice);
-        total = discountedSizePrice + discountedFlavorPrice + discountedAddInsPrice;
+        discountAmount = originalTotal - (originalTotal * discountMultiplier);
+        originalTotal = originalTotal * discountMultiplier;
         discountType = discount.name; // Store the discount type
       }
     }
   
-    const logs = [];
-    logs.push('');
-    logs.push('');
-    logs.push(`Size: ${selectedSize ? selectedSize.charAt(0).toUpperCase() + selectedSize.slice(1) : null}`);
-  
-    const flavorsText = selectedFlavors.length > 0 ? selectedFlavors.join(", ") : "None";
-    logs.push(`Flavors: ${flavorsText}`);
-  
-    const nonCustomAddIns = syrupToppings.filter((topping) => topping.isActive && !topping.custom);
-    const selectedAddIns = nonCustomAddIns.map((topping) => topping.name);
-  
-    if (selectedAddIns.length > 0) {
-      logs.push(`Add-ins: ${selectedAddIns.join(", ")}`);
-    } else {
-      logs.push("Add-ins: None");
-    }
-  
     const tax = (originalTotal * 0.056).toFixed(2);
     const totalWithTax = (parseFloat(originalTotal) + parseFloat(tax)).toFixed(2);
-  
-    logs.push('');
-    logs.push(`Subtotal: $${originalTotal.toFixed(2)}`);
-    logs.push(`Tax: $${tax}`);
-    logs.push(`Total: $${totalWithTax}`);
-    logs.push('');
-  
-    setConsoleLogs(logs); // Update the console logs with the new order information
   
     const updatedToppings = syrupToppings.map((topping) => {
       const updatedTopping = { ...topping };
@@ -163,6 +235,8 @@ const App = () => {
     setSelectedFlavors([]); // Reset selectedFlavors to an empty array
     setToppingsPrice(0); // Reset toppingsPrice to 0
     setSelectedDiscount(null); // Reset selectedDiscount to null
+    setOrderItems([]);  // Reset the OrderItems array
+    setRunningTotals([]); // Reset the RunningTotal
   
     const soldLogs = syrupToppings
       .filter((topping) => topping.isActive && !topping.custom)
@@ -200,7 +274,8 @@ const App = () => {
       total: totalWithTax,
       discount: selectedDiscount ? true : false,
       discountAmount: discountAmount.toFixed(2),
-      discountType: discountType
+      discountType: discountType,
+      employee: loginNumberTracking,
     };
   
     try {
@@ -213,32 +288,20 @@ const App = () => {
       if (paymentResponse.ok) {
         const paymentResult = await paymentResponse.text();
         console.log('Payment API response:', paymentResult);
-        alert("Please Present Payment");
+        if (!selectedDiscount) {
+          alert(`Please Present Payment\nSubtotal: ${originalTotal.toFixed(2)}\nTax: ${tax}\nTotal: ${totalWithTax}`);
+        } else {
+          alert(`Please Present Payment\nSubtotal: $${originalTotal.toFixed(2)}\nDiscount Amount: $${discountAmount.toFixed(2)}\nDiscount Type: ${discountType}\nTax: $${tax}\nTotal (after discount and tax): $${(originalTotal + parseFloat(tax)).toFixed(2)}`);
+        }
       } else {
         console.error('Failed to send payment data to the API.');
       }
     } catch (error) {
       console.error('Error occurred while sending payment data to the API:', error);
     }
-  };                            
+  };     
   
-  const getSizePrice = (size) => {
-    switch (size) {
-      case 'Small':
-        return 2.49;
-      case 'Medium':
-        return 3.29;
-      case 'Large':
-        return 4.19;
-      default:
-        return 0;
-    }
-  };
-
-  const handleAddTopping = (price) => {
-    setToppingsPrice((prevPrice) => prevPrice + price);
-  };  
-
+  // Function to handle selecting a discount
   const handleSelectDiscount = (discount) => {
     if (selectedDiscount === discount) {
       setSelectedDiscount(null); // Deselect the currently selected discount
@@ -247,43 +310,59 @@ const App = () => {
     }
   };
 
+  // Function to handle number pad button click
   const handleNumberPadClick = (number) => {
     if (loginNumber.length < 4) {
       setLoginNumber(loginNumber + number); // Append the clicked number to the current login number
     }
   };
   
-  const handleEnterButtonClick = () => {
-    const usersData = require('./data/users.json');
+  // Function to handle the enter button click
+  const handleEnterButtonClick = async () => {
+    if (loginNumber === '5555') {
+      // Debugging login with setAccessLevel of Admin
+      setAccessLevel('Admin');
+      setIsLoggedIn(true);
+      return;
+    }
+  
+    const response = await fetch('http://localhost:5000/users');
+    const usersData = await response.json();
     const matchedEntry = usersData.find((user) => user.UserId === loginNumber);
   
     if (matchedEntry) {
       if (!matchedEntry.IsClockedIn) {
-        alert('Please Clock In'); // Display an alert if the user is not clocked in
+        alert('Please Clock In');
         return;
       }
   
-      setIsLoggedIn(true); // Set the login status to true if a match is found
-      setLoginNumberTracking(loginNumber); // Capture the login number if it is a successful login
-      setEmployeeName(`${matchedEntry.FName} ${matchedEntry.LName}`); // Capture the employee name
-      setAccessLevel(matchedEntry.AccessLevel); // Set the access level based on the matched entry's AccessLevel property
+      setIsLoggedIn(true);
+      setLoginNumberTracking(loginNumber);
+      setEmployeeName(`${matchedEntry.FName} ${matchedEntry.LName}`);
+      setAccessLevel(matchedEntry.AccessLevel);
     } else {
       alert('No match found');
-      setLoginNumber(''); // Clear the login number if no match is found
+      setLoginNumber('');
     }
-  };    
+  };         
   
+  // Function to handle clock in/out
   const handleClockInOut = async () => {
     const usersData = require('./data/users.json');
     const matchedIndex = usersData.findIndex((user) => user.UserId === loginNumber);
   
     if (matchedIndex !== -1) {
       const matchedEntry = usersData[matchedIndex];
+      const timestamp = new Date();
+      const formattedTimestamp = `${timestamp.getFullYear()}-${(timestamp.getMonth() + 1).toString().padStart(2, '0')}-${timestamp.getDate().toString().padStart(2, '0')} ${timestamp.getHours().toString().padStart(2, '0')}:${timestamp.getMinutes().toString().padStart(2, '0')}:${timestamp.getSeconds().toString().padStart(2, '0')}`;
+  
       if (!matchedEntry.IsClockedIn) {
         const confirmClockIn = window.confirm('Would you like to clock in?');
         if (confirmClockIn) {
           // Update the IsClockedIn flag to true
           matchedEntry.IsClockedIn = true;
+          matchedEntry.MostRecentClockIn = formattedTimestamp; // Update the most recent clock-in key
+  
           try {
             await axios.post('http://localhost:5000/users', matchedEntry);
             alert('You have clocked in successfully.');
@@ -299,6 +378,8 @@ const App = () => {
         if (confirmClockOut) {
           // Update the IsClockedIn flag to false
           matchedEntry.IsClockedIn = false;
+          matchedEntry.MostRecentClockOut = formattedTimestamp; // Update the most recent clock-out key
+  
           try {
             await axios.post('http://localhost:5000/users', matchedEntry);
             alert('You have clocked out successfully.');
@@ -311,26 +392,25 @@ const App = () => {
           return;
         }
       }
+  
       // Update the usersData array with the updated entry
       usersData[matchedIndex] = matchedEntry;
     } else {
       alert('User Not Found');
     }
-  };    
-
+  };
+       
+  // Function to handle the logout button click
   const handleLogoutButtonClick = () => {
     setIsLoggedIn(false); // Set isLoggedIn to false to log out the user
     setLoginNumber(""); // Clear the login number
     setLoginNumberTracking(""); // Clear the login number tracking
     setEmployeeName(""); // Clear the stored employee name
-    setConsoleLogs([]); // Clear the console logs
-    setCustomerName(""); // Clear the customer name
     setSelectedSize(null); // Reset selectedSize to null
     setSelectedFlavors([]); // Reset selectedFlavors to an empty array
     setToppingsPrice(0); // Reset toppingsPrice to 0
     setSelectedDiscount(null); // Reset selectedDiscount to null
     setSyrupToppings((prevToppings) => {
-      // Reset all topping buttons to isActive: false and soldCount: 0
       return prevToppings.map((topping) => ({
         ...topping,
         isActive: false,
@@ -338,86 +418,74 @@ const App = () => {
     });
   };
   
+  // Function to handle the clear button click
   const handleClearButtonClick = () => {
     setLoginNumber('');
   };
 
+
+  // Render the POS interface
   return (
     <div className="pos-container">
       {!isLoggedIn && (
-        <div className="login-container">
-          <h2>Login</h2>
-          <div className="login-window">{loginNumber}</div>
-          <div className="number-pad">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((number) => (
-            <button key={number} onClick={() => handleNumberPadClick(number)}>
-              {number}
-            </button>
-          ))}
-          <button onClick={handleEnterButtonClick}>Enter</button>
-          <button onClick={handleClockInOut}>Clock In/Out</button>
-          <button onClick={handleClearButtonClick}>Clear</button>
-        </div>
-      </div>
+        <LoginContainer
+          loginNumber={loginNumber}
+          handleNumberPadClick={handleNumberPadClick}
+          handleEnterButtonClick={handleEnterButtonClick}
+          handleClearButtonClick={handleClearButtonClick}
+          handleClockInOut={handleClockInOut}
+        />
       )}
       {isLoggedIn && accessLevel === "Admin" && (
-        <>
-        <h1>{employeeName} - mgr.</h1>
-          <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
-          <FlavorButtons
-            selectedFlavors={selectedFlavors}
-            onSelectFlavor={setSelectedFlavors}
-          />
-          <SyrupToppingButtons
-            syrupToppings={syrupToppings}
-            setSyrupToppings={setSyrupToppings}
-            onAddTopping={handleAddTopping}
-          />
-          <DiscountButtons
-            selectedDiscount={selectedDiscount}
-            onSelectDiscount={handleSelectDiscount}
-            discounts={discounts}
-          />
-          <div className="running-total">
-            <h3>Subtotal</h3>
-            Running Subtotal: ${calculateRunningTotal()}
+        <div className="wrapper1">
+          <div className="inner-left">
+            <h1 className="emp-name">{employeeName} - mgr.</h1>
+            <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
+            <FlavorButtons
+              selectedFlavors={selectedFlavors}
+              onSelectFlavor={setSelectedFlavors}
+            />
+            <SyrupToppingButtons
+              syrupToppings={syrupToppings}
+              setSyrupToppings={setSyrupToppings}
+              onAddTopping={handleAddTopping}
+            />
+            <button onClick={handleLogoutButtonClick}>Logout</button>
+            <AddNewUser />
           </div>
-          <button className="pay-now-button" onClick={handlePayNow}>
-            Pay Now
-          </button>
-          <div className="selection-logs">
-            <h3>Printer Ticket</h3>
-            {customerName && <h3>{customerName}</h3>} {/* Display customer name */}
-            {consoleLogs
-              .filter(
-                (log) =>
-                  log.startsWith("Size:") ||
-                  log.startsWith("Flavors:") ||
-                  log.startsWith("Add-ins:")
-              )
-              .map((log, index) => (
-                <p key={index}>{log}</p>
+          <div className="receipt-div">
+            <div className="running-total">
+              Current Item: ${calculateCurrentItem()}
+            </div>
+            <div className="item-container">
+              {orderItems.map((item, index) => (
+                <div className="item-list" key={index}>
+                <button onClick={() => handleRemoveOrder(index)} className="x-button">X</button>
+                  <p>
+                    <strong>{item.size}</strong> <em>{item.flavors.join(" + ")}</em>: ${runningTotals[index].toFixed(2)}{" "}
+                  </p>
+                </div>
               ))}
+            </div>
+            <DiscountButtons
+              selectedDiscount={selectedDiscount}
+              onSelectDiscount={handleSelectDiscount}
+              discounts={discounts}
+            />
+            <button className="pay-now-button" onClick={handlePayNow}>
+              Pay Now
+            </button>
+            <button className="add-button" onClick={handleAddToOrder}>
+              Add Item
+            </button>
+            <div className="subtotal-container">
+              Subtotal: ${calculateRunningTotal()}
+            </div>
           </div>
-          <div className="total-logs">
-            <h3>Payment API information</h3>
-            {consoleLogs
-              .filter(
-                (log) =>
-                  log.startsWith("Subtotal:") ||
-                  log.startsWith("Tax:") ||
-                  log.startsWith("Total:") ||
-                  log.startsWith("Discounted Total:")
-              )
-              .map((log, index) => (
-                <p key={index}>{log}</p>
-              ))}
-          </div>
-          <button onClick={handleLogoutButtonClick}>Logout</button>
-          <AddNewUser />
-        </>
+        </div>
       )}
       {isLoggedIn && accessLevel === "User" && (
+      <div className="wrapper1">
       <div>
         <h1>{employeeName}</h1>
         <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
@@ -437,35 +505,37 @@ const App = () => {
         <button className="pay-now-button" onClick={handlePayNow}>
           Pay Now
         </button>
-        <div className="selection-logs">
-          <h3>Printer Ticket</h3>
-          {customerName && <h3>{customerName}</h3>}
-          {consoleLogs
-            .filter(
-              (log) =>
-                log.startsWith("Size:") ||
-                log.startsWith("Flavors:") ||
-                log.startsWith("Add-ins:")
-            )
-            .map((log, index) => (
-              <p key={index}>{log}</p>
-            ))}
-        </div>
-        <div className="total-logs">
-          <h3>Payment API information</h3>
-          {consoleLogs
-            .filter(
-              (log) =>
-                log.startsWith("Subtotal:") ||
-                log.startsWith("Tax:") ||
-                log.startsWith("Total:") ||
-                log.startsWith("Discounted Total:")
-            )
-            .map((log, index) => (
-              <p key={index}>{log}</p>
-            ))}
-        </div>
         <button onClick={handleLogoutButtonClick}>Logout</button>
+        </div>
+        <div className="receipt-div">
+            <div className="running-total">
+              Current Item: ${calculateCurrentItem()}
+            </div>
+            <div className="item-container">
+              {orderItems.map((item, index) => (
+                <div className="item-list" key={index}>
+                <button onClick={() => handleRemoveOrder(index)} className="x-button">X</button>
+                  <p>
+                    <strong>{item.size}</strong> <em>{item.flavors.join(" + ")}</em>: ${runningTotals[index].toFixed(2)}{" "}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <DiscountButtons
+              selectedDiscount={selectedDiscount}
+              onSelectDiscount={handleSelectDiscount}
+              discounts={discounts}
+            />
+            <button className="pay-now-button" onClick={handlePayNow}>
+              Pay Now
+            </button>
+            <button className="add-button" onClick={handleAddToOrder}>
+              Add Item
+            </button>
+            <div className="subtotal-container">
+              Subtotal: ${calculateRunningTotal()}
+            </div>
+          </div>
       </div>
     )}
     </div>

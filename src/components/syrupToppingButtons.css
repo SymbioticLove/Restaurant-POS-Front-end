@@ -1,0 +1,75 @@
+.topping-container-wrapper {
+    height: 200px; /* Set the desired height for the fixed space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 65vw;
+    border-bottom: 1px solid var(--primary);
+}
+
+.scroll-container-wrapper {
+    position: absolute;
+    height: 150px;
+    overflow-y: auto;
+    width: 16vw;
+    top: 12rem;
+    right: 0rem;
+    z-index: 10000;
+    border: 1px dashed var(--accent);
+}
+
+.syrup-topping-buttons h3 {
+    color: var(--primary);
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    margin: 3rem 0 1rem 20rem;
+    width: fit-content;
+}
+.topping-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.topping-container button {
+    height: 100px;
+    width: 100px;
+    padding: 0;
+    margin: 1rem;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 10px #000;
+    transition: all 0.2s; /* Add transition for smooth effect */
+    font-family: var(--primary-font);
+    color: var(--primary);
+    font-size: 1rem;
+    line-height: 2rem;
+}
+.topping-container button:hover {
+    color: var(--secondary);
+    background: var(--primary);
+    border: 2px solid var(--secondary);
+    cursor: pointer;
+}
+.topping-container button.selected {
+    box-shadow: 0 0 0;
+    background-color: rgba(0, 0, 0, 0.2); /* Apply semi-transparent overlay */
+}
+.topping-container button.selected:hover {
+    color: red;
+    border: 2px solid var(--primary);
+    background-color: rgba(255, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.selected-toppings-list {
+    position: absolute;
+    list-style: none;
+    width: 200px;
+    padding: 0;
+    margin: 0;
+}
+.selected-toppings-list li {
+    padding: 5px;
+}
+
+.new-button h3 {
+   margin-left: 5rem;
+   margin-top: 1.5rem;
+}

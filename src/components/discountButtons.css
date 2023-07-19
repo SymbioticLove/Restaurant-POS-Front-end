@@ -1,0 +1,10 @@
+.discount-buttons {
+    position: absolute;
+    bottom: 7rem;
+}
+
+.discount-button {
+    height: 36px;
+    width: 150px;
+    box-sizing: border-box;
+}

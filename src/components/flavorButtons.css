@@ -1,0 +1,58 @@
+.flavor-buttons h3 {
+    margin: 0 0 1rem 16.75rem;
+    font-family: var(--secondary-font);
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+.flavor-container {
+    display: flex;
+}
+.flavor-container button {
+    height: 100px;
+    width: 100px;
+    padding: 0;
+    margin: 0 1rem;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 10px #000;
+    transition: all 0.2s;
+    font-family: var(--primary-font);
+    color: var(--primary);
+    font-size: 1rem;
+}
+.flavor-container button:hover {
+    color: var(--secondary);
+    background: var(--primary);
+    border: 2px solid var(--secondary);
+    cursor: pointer;
+}
+.flavor-container button.selected {
+    box-shadow: 0 0 0;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.flavor-container button.selected:hover {
+    color: red;
+    border: 2px solid var(--primary);
+    background-color: rgba(255, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.selected-flavors {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 1rem;
+    width: 175px;
+    z-index: 10000;
+}
+.selected-flavors p {
+    margin: 0;
+}
+
+.flavor-price {
+    position: absolute;
+    right: 12rem;
+    z-index: 10000;
+    top: 22.46rem;
+}

@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+// Importing necessary libraries and styles
+import React, { useState, useEffect } from 'react';
 import './syrupToppingButtons.css';
 
+// SyrupToppingButtons is a functional component that renders buttons for different syrup toppings.
+// It takes three props: syrupToppings, setSyrupToppings, and onAddTopping.
+// syrupToppings is an array of objects where each object represents a syrup topping.
+// setSyrupToppings is a function that updates the syrup toppings.
+// onAddTopping is a function that updates the total price when a topping is added or removed.
 const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) => {
+  // State variables for the new button's name, price, total price of custom buttons, and selected toppings.
   const [newButtonName, setNewButtonName] = useState('');
   const [newButtonPrice, setNewButtonPrice] = useState(0);
   const [customButtonTotal, setCustomButtonTotal] = useState(0);
+  const [selectedToppings, setSelectedToppings] = useState([]);
 
+  // useEffect hook to update the selected toppings whenever syrupToppings changes.
+  useEffect(() => {
+    setSelectedToppings(syrupToppings.filter((topping) => topping.isActive));
+  }, [syrupToppings]);
+
+  // toggleButton is a function that toggles the active state of a topping.
+  // It also updates the total price and the total price of custom buttons.
   const toggleButton = (index) => {
     const updatedToppings = [...syrupToppings];
     const topping = updatedToppings[index];
@@ -18,6 +33,8 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
     }
   };
 
+  // handleOpenButton is a function that creates a new button with the specified name and price.
+  // It validates the input and updates the syrup toppings and resets the input fields.
   const handleOpenButton = () => {
     if (newButtonName.trim() === '' || newButtonPrice <= 0) {
       // Display an error message or handle invalid input
@@ -36,41 +53,60 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
     setNewButtonPrice(0);
   };
 
+  // The component renders a list of buttons for each topping and a form to create a new button.
+  // Each button displays the topping's name and indicates whether it's a custom topping.
+  // The selected toppings and the total price of custom buttons are also displayed.
   return (
     <div className="syrup-topping-buttons">
       <h3>Add-Ins/Toppings</h3>
-      {syrupToppings.map((syrupTopping, index) => (
-        <button
-          key={index}
-          className={`syrup-topping-button ${syrupTopping.isActive ? 'active' : ''}`}
-          onClick={() => toggleButton(index)}
-        >
-          {syrupTopping.name} (${syrupTopping.price.toFixed(2)})
-          {syrupTopping.isActive && <span className="checkmark">&#10003;</span>}
-          {syrupTopping.custom && <span className="custom-indicator">(Custom)</span>}
-        </button>
-      ))}
-      <div className="new-button">
-        <h3>Create New Button</h3>
-        <input
-          type="text"
-          placeholder="Item Name"
-          value={newButtonName}
-          onChange={(e) => setNewButtonName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Price"
-          value={newButtonPrice}
-          onChange={(e) => setNewButtonPrice(parseFloat(e.target.value))}
-        />
-        <button onClick={handleOpenButton}>Create Button</button>
+      <div className="topping-container-wrapper">
+        <div className="topping-container">
+          {syrupToppings.map((syrupTopping, index) => (
+            <button
+              key={index}
+              className={`syrup-topping-button ${syrupTopping.isActive ? 'selected' : ''}`}
+              onClick={() => toggleButton(index)}
+            >
+              {syrupTopping.name}
+              {syrupTopping.custom && <span className="custom-indicator">(Custom)</span>}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="custom-button-total">
-        Total from Custom Buttons: ${customButtonTotal.toFixed(2)}
+      {selectedToppings.length > 0 && (
+        <div className="scroll-container-wrapper">
+          <ul className="selected-toppings-list">
+            {selectedToppings.map((selectedTopping, index) => (
+              <li key={index}>
+                {selectedTopping.name}: ${selectedTopping.price.toFixed(2)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="new-button">
+        <div className="new-button-container">
+          <input
+            type="text"
+            placeholder="Item Name"
+            value={newButtonName}
+            onChange={(e) => setNewButtonName(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            value={newButtonPrice}
+            onChange={(e) => setNewButtonPrice(parseFloat(e.target.value))}
+          />
+          <button onClick={handleOpenButton}>Create Button</button>
+        </div>
+        <div className="custom-button-total">
+          Total from Custom Buttons: ${customButtonTotal.toFixed(2)}
+        </div>
       </div>
     </div>
   );
 };
 
+// Exporting the SyrupToppingButtons component for use in other files.
 export default SyrupToppingButtons;

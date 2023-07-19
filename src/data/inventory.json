@@ -1,12 +1,145 @@
 {
     "2023-07-11": {
         "Caramel Drizzle": {
+            "soldCount": 22
+        },
+        "Sweet Cold Foam": {
+            "soldCount": 124
+        },
+        "Caramel Syrup": {
+            "soldCount": 7
+        },
+        "Chocolate Shavings": {
+            "soldCount": 3
+        },
+        "Cinnamon Powder": {
+            "soldCount": 10
+        },
+        "Vanilla Syrup": {
+            "soldCount": 1
+        },
+        "Caramel Sauce": {
+            "soldCount": 10
+        },
+        "Chocolate Sauce": {
+            "soldCount": 1
+        },
+        "Caramel Whipped Cream": {
+            "soldCount": 6
+        },
+        "Almond Milk": {
+            "soldCount": 14
+        },
+        "Hazelnut Syrup": {
+            "soldCount": 3
+        },
+        "Toffee Nut Syrup": {
+            "soldCount": 2
+        },
+        "Chocolate Whipped Cream": {
+            "soldCount": 6
+        },
+        "Vanilla Whipped Cream": {
+            "soldCount": 1
+        },
+        "Oat Milk": {
+            "soldCount": 6
+        },
+        "Whipped Cream": {
+            "soldCount": 8
+        },
+        "Coconut Milk": {
+            "soldCount": 14
+        },
+        "Soy Milk": {
+            "soldCount": 2
+        },
+        "Peppermint Syrup": {
+            "soldCount": 1
+        }
+    },
+    "2023-07-12": {
+        "Caramel Drizzle": {
+            "soldCount": 3
+        },
+        "Whipped Cream": {
+            "soldCount": 1
+        },
+        "Almond Milk": {
+            "soldCount": 1
+        },
+        "Oat Milk": {
+            "soldCount": 1
+        },
+        "Soy Milk": {
             "soldCount": 1
         },
         "Sweet Cold Foam": {
             "soldCount": 1
         },
-        "Caramel Syrup": {
+        "Coconut Milk": {
+            "soldCount": 1
+        }
+    },
+    "2023-07-13": {
+        "Sweet Cold Foam": {
+            "soldCount": 3
+        },
+        "Coconut Milk": {
+            "soldCount": 3
+        },
+        "Caramel Drizzle": {
+            "soldCount": 1
+        },
+        "Peppermint Syrup": {
+            "soldCount": 1
+        }
+    },
+    "2023-07-14": {
+        "Sweet Cold Foam": {
+            "soldCount": 5
+        },
+        "Caramel Drizzle": {
+            "soldCount": 5
+        },
+        "Whipped Cream": {
+            "soldCount": 10
+        },
+        "Chocolate Shavings": {
+            "soldCount": 6
+        },
+        "Cinnamon Powder": {
+            "soldCount": 1
+        },
+        "Almond Milk": {
+            "soldCount": 1
+        },
+        "Mocha Syrup": {
+            "soldCount": 1
+        }
+    },
+    "2023-07-15": {
+        "Sweet Cold Foam": {
+            "soldCount": 3
+        },
+        "Vanilla Whipped Cream": {
+            "soldCount": 1
+        },
+        "Cinnamon Powder": {
+            "soldCount": 1
+        }
+    },
+    "2023-07-17": {
+        "Whipped Cream": {
+            "soldCount": 10
+        },
+        "Chocolate Shavings": {
+            "soldCount": 10
+        },
+        "Hazelnut Syrup": {
+            "soldCount": 1
+        },
+        "Mocha Syrup": {
             "soldCount": 1
         }
     }

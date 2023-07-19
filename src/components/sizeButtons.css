@@ -1,0 +1,50 @@
+.size-buttons h3 {
+  font-size: 2rem;
+  margin: .5rem 9.5rem 1rem;
+  font-family: var(--secondary-font);
+  color: var(--primary);
+}
+
+.butt-container {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.butt-container button {
+  height: 100px;
+  width: 100px;
+  padding: 0;
+  margin: 0 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 10px #000;
+  transition: all 0.2s; /* Add transition for smooth effect */
+  font-family: var(--primary-font);
+  color: var(--primary);
+  font-size: 1rem;
+  line-height: 2rem;
+}
+.butt-container button:hover {
+  color: var(--secondary);
+  background: var(--primary);
+  border: 2px solid var(--secondary);
+  cursor: pointer;
+}
+.butt-container button.selected {
+  box-shadow: 0 0 0;
+  background-color: rgba(0, 0, 0, 0.2); /* Apply semi-transparent overlay */
+}
+.butt-container button.selected:hover {
+  color: red;
+  border: 2px solid var(--primary);
+  background-color: rgba(255, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.selected-size {
+  position: absolute;
+  z-index: 10000;
+  width: 100px;
+  right: 14rem;
+  top: .9rem;
+}
