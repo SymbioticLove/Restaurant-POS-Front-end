@@ -61,5 +61,5 @@ Data is stored in JSON files located in the `data` directory. The current files 
 
 ## Credits
 This POS system was developed by Matthew Ford, an individual with 14 years of experience in the service industry, with 10 of these in management. This system is created to be highly informative and is well-informed
-in it's creation.
+in its creation.
 
