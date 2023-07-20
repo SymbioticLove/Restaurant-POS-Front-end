@@ -18,8 +18,9 @@ The POS system is created by an individual with 14 years of experience in the re
 3. Install the required dependencies for the frontend by running the command: `npm install`.
 4. Activate the virtual environment with the command `\env\Scripts\activate`
 6. Install the required dependencies for the backend by running the command: `pip install Flask Flask-CORS APScheduler`.
-7. Start the frontend application by running the command: `npm start`.
-8. Start the backend server by running the command: `python server.py`.
+7. Start the backend server by running the command: `python server.py` from the terminal using the virtual enviroment.
+8. Open a new terminal and navigate to the root directory of the project
+9. Start the frontend application by running the command: `npm start`.
 
 ## Frontend Dependencies
 - React
