@@ -11,6 +11,7 @@ The POS system is created by an individual with 14 years of experience in the re
 - Employee data and payroll management
 - Ordering and reporting capabilities
 - Secure and local server-based system
+- 5555 functions as a permanent debugging login and can be used to access the POS system in a debugging capacity regardless of server connection. Entering orders under this number is untested and likely will result in breaking conflicts.
 
 ## Installation
 1. Clone the repository or download the source code files.
