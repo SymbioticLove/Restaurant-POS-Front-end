@@ -22,7 +22,6 @@ const DiscountButtons = ({ selectedDiscount, onSelectDiscount, discounts }) => {
   // Render discount buttons
   return (
     <div className="discount-buttons">
-      <h3>Discounts</h3>
       {discounts.map((discount) => (
         <button
           key={discount.name}

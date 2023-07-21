@@ -440,6 +440,8 @@ const App = () => {
         <div className="wrapper1">
           <div className="inner-left">
             <h1 className="emp-name">{employeeName} - mgr.</h1>
+            <button onClick={handleLogoutButtonClick} className="logout-button">Logout</button>
+            <AddNewUser />
             <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
             <FlavorButtons
               selectedFlavors={selectedFlavors}
@@ -450,8 +452,6 @@ const App = () => {
               setSyrupToppings={setSyrupToppings}
               onAddTopping={handleAddTopping}
             />
-            <button onClick={handleLogoutButtonClick}>Logout</button>
-            <AddNewUser />
           </div>
           <div className="receipt-div">
             <div className="running-total">
@@ -472,6 +472,7 @@ const App = () => {
               onSelectDiscount={handleSelectDiscount}
               discounts={discounts}
             />
+            <h3 className="discount-h3">Discounts</h3>
             <button className="pay-now-button" onClick={handlePayNow}>
               Pay Now
             </button>
@@ -487,7 +488,8 @@ const App = () => {
       {isLoggedIn && accessLevel === "User" && (
       <div className="wrapper1">
       <div>
-        <h1>{employeeName}</h1>
+        <h1 className="emp-name">{employeeName}</h1>
+        <button onClick={handleLogoutButtonClick} className="logout-button">Logout</button>
         <SizeButtons selectedSize={selectedSize} onSelectSize={setSelectedSize} />
         <FlavorButtons
           selectedFlavors={selectedFlavors}
@@ -498,14 +500,6 @@ const App = () => {
           setSyrupToppings={setSyrupToppings}
           onAddTopping={handleAddTopping}
         />
-        <div className="running-total">
-          <h3>Subtotal</h3>
-          Running Subtotal: ${calculateRunningTotal()}
-        </div>
-        <button className="pay-now-button" onClick={handlePayNow}>
-          Pay Now
-        </button>
-        <button onClick={handleLogoutButtonClick}>Logout</button>
         </div>
         <div className="receipt-div">
             <div className="running-total">
@@ -526,6 +520,7 @@ const App = () => {
               onSelectDiscount={handleSelectDiscount}
               discounts={discounts}
             />
+            <h3 className="discount-h3">Discounts</h3>
             <button className="pay-now-button" onClick={handlePayNow}>
               Pay Now
             </button>

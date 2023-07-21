@@ -15,9 +15,11 @@
             "2023-07-16": 1439,
             "2023-07-17": 1437,
             "2023-07-18": 1438,
-            "2023-07-19": 1004
+            "2023-07-19": 1437,
+            "2023-07-20": 1439,
+            "2023-07-21": 739
         },
-        "LastUpdate": "16:46:15",
+        "LastUpdate": "12:18:15",
         "PayRate": 0
     },
     {
@@ -36,9 +38,11 @@
             "2023-07-16": 1439,
             "2023-07-17": 1437,
             "2023-07-18": 1438,
-            "2023-07-19": 1004
+            "2023-07-19": 1437,
+            "2023-07-20": 1439,
+            "2023-07-21": 739
         },
-        "LastUpdate": "16:46:15",
+        "LastUpdate": "12:18:15",
         "PayRate": 0
     },
     {
@@ -50,9 +54,11 @@
         "UserId": "7757",
         "AccessLevel": "Admin",
         "MinutesWorked": {
-            "2023-07-19": 6
+            "2023-07-19": 439,
+            "2023-07-20": 1439,
+            "2023-07-21": 739
         },
-        "LastUpdate": "16:46:15",
+        "LastUpdate": "12:18:15",
         "PayRate": 21.55
     },
     {
@@ -104,28 +110,14 @@
         "LastUpdate": "11:19:43"
     },
     {
-        "IsClockedIn": true,
-        "MostRecentClockIn": "2023-07-18 21:29:49",
-        "MostRecentClockOut": null,
-        "FName": "joe",
-        "LName": "hoe",
-        "UserId": "6666",
-        "AccessLevel": "Admin",
-        "MinutesWorked": {
-            "2023-07-19": 778
-        },
-        "PayRate": 666,
-        "LastUpdate": "16:46:15"
-    },
-    {
         "IsClockedIn": false,
         "MostRecentClockIn": null,
         "MostRecentClockOut": null,
-        "FName": "sadf",
-        "LName": "fdsa",
-        "UserId": "1234",
+        "FName": "yo",
+        "LName": "yo",
+        "UserId": "5555",
         "AccessLevel": "User",
         "MinutesWorked": {},
-        "PayRate": 12
+        "PayRate": 13
     }
 ]

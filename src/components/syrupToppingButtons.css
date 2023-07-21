@@ -10,10 +10,10 @@
     height: 150px;
     overflow-y: auto;
     width: 16vw;
-    top: 12rem;
+    top: 8rem;
     right: 0rem;
     z-index: 10000;
-    border: 1px dashed var(--accent);
+    border: 1px dashed var(--primary);
 }
 
 .syrup-topping-buttons h3 {
@@ -69,7 +69,39 @@
     padding: 5px;
 }
 
-.new-button h3 {
-   margin-left: 5rem;
-   margin-top: 1.5rem;
+.new-button {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
+.new-button button {
+    height: 50px;
+    width: 100px;
+    margin: .5rem 0 2rem;
+    border-radius: 10px;
+    border: solid 2px var(--primary);
+    color: var(--primary);
+    font-family: var(--secondary-font);
+    box-shadow: 0 0 5px #000;
+}
+.new-button button:hover {
+    color: var(--secondary);
+    background: var(--primary);
+    border: 2px solid var(--secondary);
+    cursor: pointer;
+}
+.new-button h3 {
+    margin-left: 5rem;
+    margin-top: 1.5rem;
+}
+
+.input {
+    margin: .5rem;
+}
+
+.custom-button-total {
+    color: var(--primary);
+    font-family: var(--primary-font);
+}
+

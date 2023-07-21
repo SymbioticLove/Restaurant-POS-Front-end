@@ -89,19 +89,21 @@ const SyrupToppingButtons = ({ syrupToppings, setSyrupToppings, onAddTopping }) 
           <input
             type="text"
             placeholder="Item Name"
+            className="input"
             value={newButtonName}
             onChange={(e) => setNewButtonName(e.target.value)}
           />
           <input
             type="number"
             placeholder="Price"
+            className="input"
             value={newButtonPrice}
             onChange={(e) => setNewButtonPrice(parseFloat(e.target.value))}
           />
           <button onClick={handleOpenButton}>Create Button</button>
         </div>
         <div className="custom-button-total">
-          Total from Custom Buttons: ${customButtonTotal.toFixed(2)}
+          Total From Custom Buttons: ${customButtonTotal.toFixed(2)}
         </div>
       </div>
     </div>

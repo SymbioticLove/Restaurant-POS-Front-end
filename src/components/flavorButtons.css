@@ -40,8 +40,8 @@
 
 .selected-flavors {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 18.5em;
+    top: 3rem;
     padding: 1rem;
     width: 175px;
     z-index: 10000;
@@ -52,7 +52,7 @@
 
 .flavor-price {
     position: absolute;
-    right: 12rem;
+    right: 20rem;
     z-index: 10000;
-    top: 22.46rem;
+    top: 16.46rem;
 }

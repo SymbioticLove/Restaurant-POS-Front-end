@@ -1,0 +1,76 @@
+.add-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 45rem;
+    padding: 2rem;
+    top: 2rem;
+    background: var(--primary);
+    border-radius: 15px;
+    box-shadow: 0 0 5px #000;
+}
+
+.add-new-user {
+    height: 50px;
+    width: 100px;
+    margin: 1rem 0 0 1rem;
+    border-radius: 10px;
+    border: 2px var(--primary) solid;
+    box-shadow: 0 0 5px #000
+}
+.add-new-user:hover {
+    color: var(--secondary);
+    background: var(--primary);
+    border: 2px solid var(--secondary);
+    cursor: pointer;
+}
+
+.add-user-h3 {
+    margin-top: 0;
+    color: var(--secondary);
+    border-bottom: 2px dashed var(--secondary);
+    font-family: var(--primary-font);
+}
+
+.row-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.row-container label {
+    color: var(--secondary);
+    margin: .35rem 0;
+    font-family: var(--secondary-font);
+}
+.row-container input {
+    color: var(--primary);
+    font-family: var(--primary-font);
+}
+.row-container select {
+    font-family: var(--secondary-font);
+}
+.row-container select:hover {
+    cursor: pointer;
+}
+.access-level {
+    text-align: center;
+}
+
+.sub-new-emp {
+    margin: 1rem 0 0;
+    height: 25px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid var(--secondary);
+    box-shadow: 0 0 5px #000;
+    font-family: var(--secondary-font);
+    background: var(--secondary);
+}
+.sub-new-emp:hover {
+    color: var(--secondary);
+    background: var(--primary);
+    border: 2px solid var(--secondary);
+    cursor: pointer;       
+}

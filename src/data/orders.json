@@ -758,5 +758,116 @@
         "orderNumber": "594133655429",
         "timestamp": "2023-07-19 15:41:04",
         "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "7.57",
+        "tax": "0.42",
+        "total": "7.99",
+        "orderNumber": "503863493894",
+        "timestamp": "2023-07-19 21:53:21",
+        "employee": "9999"
+    },
+    {
+        "discount": true,
+        "subtotal": "6.95",
+        "discount amount": "2.31",
+        "tax": "0.39",
+        "discount type": "Quality 25%",
+        "orderNumber": "846649450657",
+        "timestamp": "2023-07-19 21:53:50",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "37.56",
+        "tax": "2.10",
+        "total": "39.66",
+        "orderNumber": "978191726524",
+        "timestamp": "2023-07-19 21:54:37",
+        "employee": "9999"
+    },
+    {
+        "discount": true,
+        "subtotal": "4.25",
+        "discount amount": "1.42",
+        "tax": "0.24",
+        "discount type": "Employee",
+        "orderNumber": "201475365606",
+        "timestamp": "2023-07-19 21:54:44",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "32.54",
+        "tax": "1.82",
+        "total": "34.36",
+        "orderNumber": "425710005224",
+        "timestamp": "2023-07-19 21:55:02",
+        "employee": "9999"
+    },
+    {
+        "discount": true,
+        "subtotal": "6.86",
+        "discount amount": "6.86",
+        "tax": "0.38",
+        "discount type": "Service 50%",
+        "orderNumber": "183152325588",
+        "timestamp": "2023-07-19 21:55:15",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "23.16",
+        "tax": "1.30",
+        "total": "24.46",
+        "orderNumber": "868949171876",
+        "timestamp": "2023-07-19 21:55:27",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "4.56",
+        "tax": "0.26",
+        "total": "4.82",
+        "orderNumber": "498556781063",
+        "timestamp": "2023-07-20 17:04:40",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "30.54",
+        "tax": "1.71",
+        "total": "32.25",
+        "orderNumber": "353732522796",
+        "timestamp": "2023-07-20 17:50:39",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "102.37",
+        "tax": "5.73",
+        "total": "108.10",
+        "orderNumber": "794172280876",
+        "timestamp": "2023-07-20 18:01:45",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "92.27",
+        "tax": "5.17",
+        "total": "97.44",
+        "orderNumber": "252956836572",
+        "timestamp": "2023-07-20 18:02:37",
+        "employee": "9999"
+    },
+    {
+        "discount": false,
+        "subtotal": "5.56",
+        "tax": "0.31",
+        "total": "5.87",
+        "orderNumber": "068249633253",
+        "timestamp": "2023-07-20 18:14:41",
+        "employee": "9999"
     }
 ]

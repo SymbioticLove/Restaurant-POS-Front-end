@@ -1,6 +1,7 @@
-// Importing necessary libraries and hooks
+// Import necessary libraries and hooks
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddNewUser.css';
 
 // AddNewUser is a functional component that renders a form for adding a new user.
 // It uses state variables to manage the form inputs and an async function to handle the form submission.
@@ -19,25 +20,25 @@ const AddNewUser = () => {
       alert('Please fill out all of the fields');
       return;
     }
-  
+
     // Check if User ID is a 4-digit number
     if (!/^\d{4}$/.test(userID)) {
       alert('Please enter a 4-digit User ID');
       return;
     }
-  
+
     try {
       // Fetch existing user data
       const response = await axios.get('http://localhost:5000/users');
       const existingUsers = response.data;
-  
+
       // Check if User ID is already taken
       const isUserIDTaken = existingUsers.some(user => user.UserId === userID);
       if (isUserIDTaken) {
         alert('Employee number already in use');
         return;
       }
-  
+
       // Construct new user object
       const newUser = {
         IsClockedIn: false,
@@ -50,17 +51,17 @@ const AddNewUser = () => {
         MinutesWorked: {},
         PayRate: payRate,
       };
-  
+
       // Post new user data to the server
       await axios.post('http://localhost:5000/users', newUser);
-      
+
       // Reset form fields
       setFirstName('');
       setLastName('');
       setUserID('');
       setAccessLevel('');
       setPayRate(0);
-      
+
       alert('New user added successfully!');
     } catch (error) {
       // Log any errors and alert the user
@@ -71,9 +72,9 @@ const AddNewUser = () => {
 
   // Render form for adding a new user
   return (
-    <div>
-      <h3>Add New User</h3>
-      <div>
+    <div className="add-wrapper">
+      <h3 className="add-user-h3">Add New User</h3>
+      <div className="row-container">
         <label htmlFor="firstName">First Name:</label>
         <input
           type="text"
@@ -82,7 +83,7 @@ const AddNewUser = () => {
           onChange={(e) => setFirstName(e.target.value)}
         />
       </div>
-      <div>
+      <div className="row-container">
         <label htmlFor="lastName">Last Name:</label>
         <input
           type="text"
@@ -91,7 +92,7 @@ const AddNewUser = () => {
           onChange={(e) => setLastName(e.target.value)}
         />
       </div>
-      <div>
+      <div className="row-container">
         <label htmlFor="userID">User ID:</label>
         <input
           type="text"
@@ -100,7 +101,7 @@ const AddNewUser = () => {
           onChange={(e) => setUserID(e.target.value)}
         />
       </div>
-      <div>
+      <div className="row-container">
         <label htmlFor="payRate">Payrate:</label>
         <input
           type="number"
@@ -110,8 +111,8 @@ const AddNewUser = () => {
           onChange={(e) => setPayRate(parseFloat(e.target.value))}
         />
       </div>
-      <div>
-        <label htmlFor="accessLevel">Access Level:</label>
+      <div className="row-container">
+        <label htmlFor="accessLevel" className="access-level">Access Level:</label>
         <select
           id="accessLevel"
           value={accessLevel}
@@ -122,10 +123,29 @@ const AddNewUser = () => {
           <option value="Admin">Admin</option>
         </select>
       </div>
-      <button onClick={handleAddUser}>Submit</button>
+      <button onClick={handleAddUser} className="sub-new-emp">Submit →</button>
     </div>
   );
 };
 
-// Exporting the component for use in other parts of the application
-export default AddNewUser;
+// AddUserButton component renders a button to toggle the visibility of the AddNewUser component
+const AddUserButton = () => {
+  const [showAddUser, setShowAddUser] = useState(false);
+
+  const toggleAddUser = () => {
+    setShowAddUser(prevState => !prevState);
+  };
+
+  return (
+    <div>
+      <button onClick={toggleAddUser} className="add-new-user">Add User</button>
+      {showAddUser && (
+        <div className="button-window">
+          <AddNewUser />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AddUserButton;
