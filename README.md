@@ -15,7 +15,7 @@ The POS system is created by an individual with 14 years of experience in the re
 
 ## Installation
 1. Clone the repository or download the source code files.
-2. Navigate to the downloaded directory
+2. Navigate to the downloaded directory in a commmand terminal
 3. Install the required dependencies for the frontend by running the command: `npm install`.
 4. Activate the virtual environment with the command `\env\Scripts\activate`
 6. Install the required dependencies for the backend by running the command: `pip install Flask Flask-CORS APScheduler`.
