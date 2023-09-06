@@ -150,5 +150,19 @@
         "Caramel Whipped Cream": {
             "soldCount": 1
         }
+    },
+    "2023-09-06": {
+        "Cinnamon Powder": {
+            "soldCount": 1
+        },
+        "Vanilla Syrup": {
+            "soldCount": 1
+        },
+        "Hazelnut Syrup": {
+            "soldCount": 1
+        },
+        "Caramel Syrup": {
+            "soldCount": 1
+        }
     }
 }

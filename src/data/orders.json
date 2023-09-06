@@ -869,5 +869,15 @@
         "orderNumber": "068249633253",
         "timestamp": "2023-07-20 18:14:41",
         "employee": "9999"
+    },
+    {
+        "discount": true,
+        "subtotal": "16.88",
+        "discount amount": "5.63",
+        "tax": "0.95",
+        "discount type": "Quality 25%",
+        "orderNumber": "795231112438",
+        "timestamp": "2023-09-06 14:20:21",
+        "employee": "7757"
     }
 ]
